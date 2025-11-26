@@ -1,32 +1,31 @@
-import { Component } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+// src/app/auth/auth.ts
+import { Injectable } from '@angular/core';
 
-@Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+@Injectable({
+  providedIn: 'root',
 })
-export class LoginComponent {
-  errorMessage: string = '';
+export class AuthService {
+  private readonly TOKEN_KEY = 'token';
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router
-  ) { }
-
-  onSubmit(): void {
-    const user: any = {};
-
-    const { email, password } = user;
-
-    if (email && password) {
-      this.router.navigate(['/dashboard']);
-    } else {
-      this.errorMessage = 'Email o contraseña incorrectos';
+  // Login "fake" solo para la prueba
+  login(email: string, password: string): boolean {
+    // puedes cambiar estas credenciales si quieres
+    if (email === 'test@demo.com' && password === '123456') {
+      localStorage.setItem(this.TOKEN_KEY, 'FAKE_TOKEN_123');
+      return true;
     }
+    return false;
+  }
+
+  logout(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 }

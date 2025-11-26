@@ -1,24 +1,27 @@
-<div class="login-container">
-  <h2>Login</h2>
-  <form (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" formControlName="email" placeholder="ejemplo@correo.com" />
-      <small>
-        Email inválido
-      </small>
-    </div>
+<h2>Iniciar sesión</h2>
 
-    <div class="form-group">
-      <label>Contraseña</label>
-      <input type="password" formControlName="password" placeholder="********" />
-      <small>
-        Mínimo 6 caracteres
-      </small>
-    </div>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label>Correo electrónico</label>
+    <input type="email" formControlName="email" />
+    <small *ngIf="hasError('email', 'required')">El correo es obligatorio</small>
+    <small *ngIf="hasError('email', 'email')">Correo no válido</small>
+  </div>
 
-    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div>
+    <label>Contraseña</label>
+    <input type="password" formControlName="password" />
+    <small *ngIf="hasError('password', 'required')">
+      La contraseña es obligatoria
+    </small>
+    <small *ngIf="hasError('password', 'minlength')">
+      Mínimo 6 caracteres
+    </small>
+  </div>
 
-    <button type="submit">Ingresar</button>
-  </form>
-</div>
+  <button type="submit" [disabled]="loginForm.invalid">
+    Entrar
+  </button>
+
+  <p *ngIf="errorMsg" style="color: red">{{ errorMsg }}</p>
+</form>
